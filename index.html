@@ -65,27 +65,108 @@
     #confetti {
       z-index: 3;
     }
+
+    .btn-hoa {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 4;
+      background: none;
+      border: 2px solid white;
+      color: white;
+      font-size: 1.5rem;
+      padding: 10px 20px;
+      cursor: pointer;
+      pointer-events: auto;
+      text-shadow: 0 0 5px white, 0 0 10px white;
+    }
+
+    #hoa-section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #111;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 50px;
+      z-index: 5;
+    }
+
+    .hoa-name {
+      font-size: 2rem;
+      color: white;
+      margin: 10px 0;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff;
+    }
+
+    .back-btn {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      font-size: 1.2rem;
+      color: white;
+      background: none;
+      border: 2px solid white;
+      padding: 5px 15px;
+      cursor: pointer;
+      z-index: 6;
+      text-shadow: 0 0 5px white;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Neon Text -->
-  <div class="center">
-    <h1 class="neon">txt</h1>
-    <h2 class="neon-sub">wjlc</h2>
+  <!-- Main Section -->
+  <div id="main-section">
+    <div class="center">
+      <h1 class="neon">txt</h1>
+      <h2 class="neon-sub">wjlc</h2>
+    </div>
+    <button class="btn-hoa" onclick="showHOA()">HOA</button>
+    <canvas id="snow"></canvas>
+    <canvas id="mini-snow" width="300" height="150"></canvas>
+    <canvas id="confetti"></canvas>
   </div>
 
-  <!-- Full Background Snow -->
-  <canvas id="snow"></canvas>
-
-  <!-- Small Snow Over Text -->
-  <canvas id="mini-snow" width="300" height="150"></canvas>
-
-  <!-- Confetti Canvas -->
-  <canvas id="confetti"></canvas>
+  <!-- HOA Section -->
+  <div id="hoa-section">
+    <button class="back-btn" onclick="showMain()">TXT</button>
+    <div>
+      <div class="hoa-name">goku</div>
+      <div class="hoa-name">cube</div>
+      <div class="hoa-name">critzo</div>
+      <div class="hoa-name">ant</div>
+      <div class="hoa-name">ncxkzos</div>
+      <div class="hoa-name">ginger</div>
+      <div class="hoa-name">JB</div>
+      <div class="hoa-name">nuwz</div>
+      <div class="hoa-name">Killua</div>
+      <div class="hoa-name">spares</div>
+      <div class="hoa-name">luv</div>
+      <div class="hoa-name">vlonto</div>
+      <div class="hoa-name">vylao</div>
+    </div>
+  </div>
 
   <script>
-    // FULLSCREEN SNOW
+    // Toggle Sections
+    function showHOA() {
+      document.getElementById('main-section').style.display = 'none';
+      document.getElementById('hoa-section').style.display = 'flex';
+    }
+
+    function showMain() {
+      document.getElementById('hoa-section').style.display = 'none';
+      document.getElementById('main-section').style.display = 'block';
+    }
+
+    // (All your existing animation JS code below, unchanged)
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
 
@@ -137,7 +218,6 @@
       requestAnimationFrame(animateSnow);
     }
 
-    // MINI SNOW ON TEXT
     const miniCanvas = document.getElementById('mini-snow');
     const miniCtx = miniCanvas.getContext('2d');
     const miniFlakes = [];
@@ -178,7 +258,6 @@
       requestAnimationFrame(animateMini);
     }
 
-    // CONFETTI EFFECT
     const confettiCanvas = document.getElementById('confetti');
     const confettiCtx = confettiCanvas.getContext('2d');
     const confettiParticles = [];
@@ -230,7 +309,7 @@
       requestAnimationFrame(animateConfetti);
     }
 
-    // Initialize all animations
+    // Init
     function init() {
       resize();
       animateSnow();
@@ -238,13 +317,12 @@
       animateConfetti();
     }
 
-    // Event listener for mouse movement
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
 
-    // Start animations on window load
     window.addEventListener('load', init);
   </script>
 </body>
-</html> 
+</html>
+
