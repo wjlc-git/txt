@@ -68,40 +68,43 @@
   </style>
 </head>
 <body>
+
+  <!-- Neon Text -->
   <div class="center">
     <h1 class="neon">txt</h1>
     <h2 class="neon-sub">wjlc</h2>
   </div>
 
+  <!-- Full Background Snow -->
   <canvas id="snow"></canvas>
+
+  <!-- Small Snow Over Text -->
   <canvas id="mini-snow" width="300" height="150"></canvas>
+
+  <!-- Confetti Canvas -->
   <canvas id="confetti"></canvas>
 
   <script>
-    // Snow setup
+    // FULLSCREEN SNOW
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
-    const confettiCanvas = document.getElementById('confetti');
-    const confettiCtx = confettiCanvas.getContext('2d');
 
     let width, height;
     function resize() {
-      width = window.innerWidth;
-      height = window.innerHeight;
-      snowCanvas.width = width;
-      snowCanvas.height = height;
+      width = snowCanvas.width = window.innerWidth;
+      height = snowCanvas.height = window.innerHeight;
       confettiCanvas.width = width;
       confettiCanvas.height = height;
     }
     window.addEventListener('resize', resize);
-    resize();
 
     const snowFlakes = [];
     const snowColors = ['#ffffff', '#cccccc', '#333333'];
+
     for (let i = 0; i < 150; i++) {
       snowFlakes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
         r: Math.random() * 3 + 1,
         d: Math.random() + 0.5,
         color: snowColors[Math.floor(Math.random() * snowColors.length)]
@@ -116,6 +119,10 @@
         snowCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         snowCtx.fill();
       }
+      moveSnow();
+    }
+
+    function moveSnow() {
       for (let flake of snowFlakes) {
         flake.y += flake.d;
         if (flake.y > height) {
@@ -129,12 +136,12 @@
       drawSnow();
       requestAnimationFrame(animateSnow);
     }
-    animateSnow();
 
-    // Mini snow
+    // MINI SNOW ON TEXT
     const miniCanvas = document.getElementById('mini-snow');
     const miniCtx = miniCanvas.getContext('2d');
     const miniFlakes = [];
+
     for (let i = 0; i < 40; i++) {
       miniFlakes.push({
         x: Math.random() * miniCanvas.width,
@@ -153,6 +160,10 @@
         miniCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         miniCtx.fill();
       }
+      moveMiniSnow();
+    }
+
+    function moveMiniSnow() {
       for (let flake of miniFlakes) {
         flake.y += flake.d;
         if (flake.y > miniCanvas.height) {
@@ -162,49 +173,20 @@
       }
     }
 
-    function animateMiniSnow() {
+    function animateMini() {
       drawMiniSnow();
-      requestAnimationFrame(animateMiniSnow);
-    }
-    animateMiniSnow();
-
-    // Confetti
-    const confetti = [];
-    function drawStar(x, y, r, color, opacity) {
-      confettiCtx.save();
-      confettiCtx.beginPath();
-      confettiCtx.translate(x, y);
-      confettiCtx.moveTo(0, 0 - r);
-      for (let i = 0; i < 5; i++) {
-        confettiCtx.rotate(Math.PI / 5);
-        confettiCtx.lineTo(0, 0 - (r * 0.5));
-        confettiCtx.rotate(Math.PI / 5);
-        confettiCtx.lineTo(0, 0 - r);
-      }
-      confettiCtx.closePath();
-      confettiCtx.globalAlpha = opacity;
-      confettiCtx.fillStyle = color;
-      confettiCtx.fill();
-      confettiCtx.restore();
+      requestAnimationFrame(animateMini);
     }
 
-    function animateConfetti() {
-      confettiCtx.clearRect(0, 0, width, height);
-      for (let i = confetti.length - 1; i >= 0; i--) {
-        let c = confetti[i];
-        c.y += c.dy;
-        c.opacity -= 0.01;
-        if (c.opacity <= 0) confetti.splice(i, 1);
-        else drawStar(c.x, c.y, c.r, c.color, c.opacity);
-      }
-      requestAnimationFrame(animateConfetti);
-    }
-    animateConfetti();
+    // CONFETTI EFFECT
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    const confettiParticles = [];
 
     function spawnConfetti(x, y) {
       const colors = ['#ff0040', '#ff9900', '#33cc33', '#0099ff', '#cc33ff', '#ffff00'];
       for (let i = 0; i < 5; i++) {
-        confetti.push({
+        confettiParticles.push({
           x: x + (Math.random() * 20 - 10),
           y: y + (Math.random() * 20 - 10),
           r: Math.random() * 4 + 2,
@@ -215,9 +197,55 @@
       }
     }
 
+    function drawConfetti() {
+      confettiCtx.clearRect(0, 0, width, height);
+      for (let i = confettiParticles.length - 1; i >= 0; i--) {
+        let c = confettiParticles[i];
+        confettiCtx.save();
+        confettiCtx.beginPath();
+        confettiCtx.translate(c.x, c.y);
+        confettiCtx.moveTo(0, 0 - c.r);
+        for (let j = 0; j < 5; j++) {
+          confettiCtx.rotate(Math.PI / 5);
+          confettiCtx.lineTo(0, 0 - (c.r * 0.5));
+          confettiCtx.rotate(Math.PI / 5);
+          confettiCtx.lineTo(0, 0 - c.r);
+        }
+        confettiCtx.closePath();
+        confettiCtx.globalAlpha = c.opacity;
+        confettiCtx.fillStyle = c.color;
+        confettiCtx.fill();
+        confettiCtx.restore();
+
+        c.y += c.dy;
+        c.opacity -= 0.01;
+        if (c.opacity <= 0) {
+          confettiParticles.splice(i, 1);
+        }
+      }
+    }
+
+    function animateConfetti() {
+      drawConfetti();
+      requestAnimationFrame(animateConfetti);
+    }
+
+    // Initialize all animations
+    function init() {
+      resize();
+      animateSnow();
+      animateMini();
+      animateConfetti();
+    }
+
+    // Event listener for mouse movement
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
+
+    // Start animations on window load
+    window.addEventListener('load', init);
   </script>
 </body>
 </html>
+
