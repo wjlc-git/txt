@@ -78,22 +78,16 @@
   <!-- Full Background Snow -->
   <canvas id="snow"></canvas>
 
-  <!-- Star Sparkles Over Text -->
+  <!-- Small Snow Over Text -->
   <canvas id="mini-snow" width="300" height="150"></canvas>
 
   <!-- Confetti Canvas -->
   <canvas id="confetti"></canvas>
 
   <script>
-    // SETUP
+    // FULLSCREEN SNOW
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
-
-    const confettiCanvas = document.getElementById('confetti');
-    const confettiCtx = confettiCanvas.getContext('2d');
-
-    const miniCanvas = document.getElementById('mini-snow');
-    const miniCtx = miniCanvas.getContext('2d');
 
     let width, height;
     function resize() {
@@ -104,7 +98,6 @@
     }
     window.addEventListener('resize', resize);
 
-    // BACKGROUND SNOW
     const snowFlakes = [];
     const snowColors = ['#ffffff', '#cccccc', '#333333'];
 
@@ -126,6 +119,10 @@
         snowCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         snowCtx.fill();
       }
+      moveSnow();
+    }
+
+    function moveSnow() {
       for (let flake of snowFlakes) {
         flake.y += flake.d;
         if (flake.y > height) {
@@ -140,58 +137,61 @@
       requestAnimationFrame(animateSnow);
     }
 
-    // MINI SPARKLE STARS OVER TEXT
-    const miniStars = [];
-    const starColors = ['#ffffff', '#aaaaaa'];
+    // MINI SNOW ON TEXT
+    const miniCanvas = document.getElementById('mini-snow');
+    const miniCtx = miniCanvas.getContext('2d');
+    const miniFlakes = [];
 
-    for (let i = 0; i < 30; i++) {
-      miniStars.push({
+    for (let i = 0; i < 40; i++) {
+      miniFlakes.push({
         x: Math.random() * miniCanvas.width,
         y: Math.random() * miniCanvas.height,
-        r: Math.random() * 1 + 0.5,
+        r: Math.random() * 1.5 + 0.5,
         d: Math.random() * 0.5 + 0.2,
-        color: starColors[Math.floor(Math.random() * starColors.length)],
-        flicker: Math.random()
+        color: snowColors[Math.floor(Math.random() * snowColors.length)]
       });
     }
 
-    function drawMiniStars() {
+    function drawMiniSnow() {
       miniCtx.clearRect(0, 0, miniCanvas.width, miniCanvas.height);
-      for (let star of miniStars) {
-        miniCtx.save();
-        miniCtx.globalAlpha = 0.5 + Math.sin(Date.now() * 0.005 + star.flicker * 10) * 0.5;
+      for (let flake of miniFlakes) {
         miniCtx.beginPath();
-        miniCtx.fillStyle = star.color;
-        miniCtx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+        miniCtx.fillStyle = flake.color;
+        miniCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         miniCtx.fill();
-        miniCtx.restore();
+      }
+      moveMiniSnow();
+    }
 
-        star.y += star.d;
-        if (star.y > miniCanvas.height) {
-          star.y = 0;
-          star.x = Math.random() * miniCanvas.width;
+    function moveMiniSnow() {
+      for (let flake of miniFlakes) {
+        flake.y += flake.d;
+        if (flake.y > miniCanvas.height) {
+          flake.y = 0;
+          flake.x = Math.random() * miniCanvas.width;
         }
       }
     }
 
-    function animateMiniStars() {
-      drawMiniStars();
-      requestAnimationFrame(animateMiniStars);
+    function animateMini() {
+      drawMiniSnow();
+      requestAnimationFrame(animateMini);
     }
 
-    // CONFETTI STARS (MOUSE)
+    // CONFETTI EFFECT
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
     const confettiParticles = [];
 
     function spawnConfetti(x, y) {
       const colors = ['#ff0040', '#ff9900', '#33cc33', '#0099ff', '#cc33ff', '#ffff00'];
-      for (let i = 0; i < 2; i++) { // fewer stars
+      for (let i = 0; i < 5; i++) {
         confettiParticles.push({
           x: x + (Math.random() * 20 - 10),
           y: y + (Math.random() * 20 - 10),
-          r: Math.random() * 1.5 + 0.5,
+          r: Math.random() * 4 + 2,
           dy: Math.random() * 1 + 0.5,
           opacity: 1,
-          sparkleOffset: Math.random() * 10,
           color: colors[Math.floor(Math.random() * colors.length)]
         });
       }
@@ -204,12 +204,6 @@
         confettiCtx.save();
         confettiCtx.beginPath();
         confettiCtx.translate(c.x, c.y);
-
-        // Sparkle effect via opacity flicker
-        let sparkle = 0.5 + Math.sin(Date.now() * 0.01 + c.sparkleOffset * 10) * 0.5;
-        confettiCtx.globalAlpha = c.opacity * sparkle;
-
-        // Draw star
         confettiCtx.moveTo(0, 0 - c.r);
         for (let j = 0; j < 5; j++) {
           confettiCtx.rotate(Math.PI / 5);
@@ -218,6 +212,7 @@
           confettiCtx.lineTo(0, 0 - c.r);
         }
         confettiCtx.closePath();
+        confettiCtx.globalAlpha = c.opacity;
         confettiCtx.fillStyle = c.color;
         confettiCtx.fill();
         confettiCtx.restore();
@@ -235,19 +230,22 @@
       requestAnimationFrame(animateConfetti);
     }
 
-    // INIT
+    // Initialize all animations
     function init() {
       resize();
       animateSnow();
-      animateMiniStars();
+      animateMini();
       animateConfetti();
     }
 
+    // Event listener for mouse movement
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
 
+    // Start animations on window load
     window.addEventListener('load', init);
   </script>
 </body>
 </html>
+
