@@ -77,8 +77,11 @@
   <!-- Small Snow Over Text -->
   <canvas id="mini-snow" width="300" height="150"></canvas>
 
+  <!-- Rainbow Star Confetti -->
+  <canvas id="confetti"></canvas>
+
   <script>
-    // FULLSCREEN SNOW
+    // SNOW SETUP
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
 
@@ -86,8 +89,11 @@
     function resize() {
       width = snowCanvas.width = window.innerWidth;
       height = snowCanvas.height = window.innerHeight;
+      confettiCanvas.width = width;
+      confettiCanvas.height = height;
     }
     window.addEventListener('resize', resize);
+
     resize();
 
     const snowFlakes = [];
@@ -130,7 +136,7 @@
     }
     animateSnow();
 
-    // MINI SNOW ON TEXT
+    // MINI SNOW
     const miniCanvas = document.getElementById('mini-snow');
     const miniCtx = miniCanvas.getContext('2d');
     const miniFlakes = [];
@@ -171,6 +177,59 @@
       requestAnimationFrame(animateMini);
     }
     animateMini();
+
+    // CONFETTI SETUP
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
+    let confetti = [];
+
+    function drawStar(x, y, r, color, opacity) {
+      confettiCtx.save();
+      confettiCtx.beginPath();
+      confettiCtx.translate(x, y);
+      confettiCtx.moveTo(0, 0 - r);
+      for (let i = 0; i < 5; i++) {
+        confettiCtx.rotate(Math.PI / 5);
+        confettiCtx.lineTo(0, 0 - (r * 0.5));
+        confettiCtx.rotate(Math.PI / 5);
+        confettiCtx.lineTo(0, 0 - r);
+      }
+      confettiCtx.closePath();
+      confettiCtx.globalAlpha = opacity;
+      confettiCtx.fillStyle = color;
+      confettiCtx.fill();
+      confettiCtx.restore();
+    }
+
+    function animateConfetti() {
+      confettiCtx.clearRect(0, 0, width, height);
+      confetti = confetti.filter(p => p.opacity > 0);
+      for (let p of confetti) {
+        p.y += p.dy;
+        p.opacity -= 0.01;
+        drawStar(p.x, p.y, p.r, p.color, p.opacity);
+      }
+      requestAnimationFrame(animateConfetti);
+    }
+    animateConfetti();
+
+    function spawnConfetti(x, y) {
+      const colors = ['#ff0040', '#ff9900', '#33cc33', '#0099ff', '#cc33ff', '#ffff00'];
+      for (let i = 0; i < 5; i++) {
+        confetti.push({
+          x: x + (Math.random() * 20 - 10),
+          y: y + (Math.random() * 20 - 10),
+          r: Math.random() * 4 + 2,
+          dy: Math.random() * 1 + 0.5,
+          opacity: 1,
+          color: colors[Math.floor(Math.random() * colors.length)]
+        });
+      }
+    }
+
+    document.addEventListener('mousemove', e => {
+      spawnConfetti(e.clientX, e.clientY);
+    });
   </script>
 </body>
 </html>
