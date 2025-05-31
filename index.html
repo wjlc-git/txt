@@ -61,44 +61,43 @@
       z-index: 1;
       pointer-events: none;
     }
+
+    #confetti {
+      z-index: 3;
+    }
   </style>
 </head>
 <body>
-
-  <!-- Neon Text -->
   <div class="center">
     <h1 class="neon">txt</h1>
     <h2 class="neon-sub">wjlc</h2>
   </div>
 
-  <!-- Full Background Snow -->
   <canvas id="snow"></canvas>
-
-  <!-- Small Snow Over Text -->
   <canvas id="mini-snow" width="300" height="150"></canvas>
-
-  <!-- Rainbow Star Confetti -->
   <canvas id="confetti"></canvas>
 
   <script>
-    // SNOW SETUP
+    // Snow setup
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
 
     let width, height;
     function resize() {
-      width = snowCanvas.width = window.innerWidth;
-      height = snowCanvas.height = window.innerHeight;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      snowCanvas.width = width;
+      snowCanvas.height = height;
       confettiCanvas.width = width;
       confettiCanvas.height = height;
     }
     window.addEventListener('resize', resize);
-
     resize();
 
     const snowFlakes = [];
     const snowColors = ['#ffffff', '#cccccc', '#333333'];
-
     for (let i = 0; i < 150; i++) {
       snowFlakes.push({
         x: Math.random() * width,
@@ -117,10 +116,6 @@
         snowCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         snowCtx.fill();
       }
-      moveSnow();
-    }
-
-    function moveSnow() {
       for (let flake of snowFlakes) {
         flake.y += flake.d;
         if (flake.y > height) {
@@ -136,11 +131,10 @@
     }
     animateSnow();
 
-    // MINI SNOW
+    // Mini snow
     const miniCanvas = document.getElementById('mini-snow');
     const miniCtx = miniCanvas.getContext('2d');
     const miniFlakes = [];
-
     for (let i = 0; i < 40; i++) {
       miniFlakes.push({
         x: Math.random() * miniCanvas.width,
@@ -159,10 +153,6 @@
         miniCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         miniCtx.fill();
       }
-      moveMiniSnow();
-    }
-
-    function moveMiniSnow() {
       for (let flake of miniFlakes) {
         flake.y += flake.d;
         if (flake.y > miniCanvas.height) {
@@ -172,17 +162,14 @@
       }
     }
 
-    function animateMini() {
+    function animateMiniSnow() {
       drawMiniSnow();
-      requestAnimationFrame(animateMini);
+      requestAnimationFrame(animateMiniSnow);
     }
-    animateMini();
+    animateMiniSnow();
 
-    // CONFETTI SETUP
-    const confettiCanvas = document.getElementById('confetti');
-    const confettiCtx = confettiCanvas.getContext('2d');
-    let confetti = [];
-
+    // Confetti
+    const confetti = [];
     function drawStar(x, y, r, color, opacity) {
       confettiCtx.save();
       confettiCtx.beginPath();
@@ -203,11 +190,12 @@
 
     function animateConfetti() {
       confettiCtx.clearRect(0, 0, width, height);
-      confetti = confetti.filter(p => p.opacity > 0);
-      for (let p of confetti) {
-        p.y += p.dy;
-        p.opacity -= 0.01;
-        drawStar(p.x, p.y, p.r, p.color, p.opacity);
+      for (let i = confetti.length - 1; i >= 0; i--) {
+        let c = confetti[i];
+        c.y += c.dy;
+        c.opacity -= 0.01;
+        if (c.opacity <= 0) confetti.splice(i, 1);
+        else drawStar(c.x, c.y, c.r, c.color, c.opacity);
       }
       requestAnimationFrame(animateConfetti);
     }
