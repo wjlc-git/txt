@@ -81,8 +81,6 @@
 
     .hoa-button {
       bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
     }
 
     .back-button {
@@ -130,12 +128,14 @@
       <h1 class="neon">txt</h1>
       <h2 class="neon-sub">wjlc</h2>
     </div>
-    <button class="hoa-button" onclick="showSection('hoa')">HOA</button>
+    <button class="hoa-button" style="left: calc(50% - 160px);" onclick="showSection('members')">Members</button>
+    <button class="hoa-button" style="left: 50%; transform: translateX(-50%);" onclick="showSection('hoa')">HOA</button>
+    <button class="hoa-button" style="left: calc(50% + 160px);" onclick="showSection('ops')">Ops</button>
   </div>
 
   <div id="hoa" class="section">
     <button class="back-button" onclick="showSection('main')">TXT</button>
-    <div class="hoa-title">HOA</div>
+    <div class="hoa-title">Hall Of Autism</div>
     <div class="hoa-list">
       <div class="neon-small">goku</div>
       <div class="neon-small">cube</div>
@@ -150,6 +150,22 @@
       <div class="neon-small">luv</div>
       <div class="neon-small">vlonto</div>
       <div class="neon-small">vylao</div>
+    </div>
+  </div>
+
+  <div id="members" class="section">
+    <button class="back-button" onclick="showSection('main')">TXT</button>
+    <div class="hoa-title">Members</div>
+    <div class="hoa-list">
+      <div class="neon-small">wjlc</div>
+    </div>
+  </div>
+
+  <div id="ops" class="section">
+    <button class="back-button" onclick="showSection('main')">TXT</button>
+    <div class="hoa-title">Operations</div>
+    <div class="hoa-list">
+      <div class="neon-small">No Operations</div>
     </div>
   </div>
 
@@ -288,4 +304,6 @@
   </script>
 </body>
 </html>
+
+
 
