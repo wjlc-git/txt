@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>txt</title>
   <style>
     html, body {
@@ -12,6 +12,31 @@
       overflow: hidden;
       font-family: 'Arial', sans-serif;
       color: white;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .section.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .center {
@@ -45,7 +70,7 @@
     }
 
     .neon-small {
-      font-size: 1.2rem;
+      font-size: 0.9rem;
       margin: 0.3rem 0;
       color: #fff;
       text-shadow:
@@ -53,11 +78,42 @@
         0 0 4px #fff;
     }
 
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
+    .hoa-title {
+      font-size: 3rem;
+      margin-top: 40px;
+      color: white;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 15px #fff;
+    }
+
+    .hoa-list {
+      margin-top: 30px;
+    }
+
+    .hoa-button,
+    .back-button {
+      position: absolute;
+      padding: 10px 30px;
+      font-size: 1.2rem;
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 4;
+    }
+
+    .hoa-button {
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .back-button {
+      top: 20px;
+      left: 20px;
     }
 
     #mini-snow {
@@ -73,69 +129,6 @@
 
     #confetti {
       z-index: 3;
-    }
-
-    .hoa-button {
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 10px 30px;
-      font-size: 1.2rem;
-      background: transparent;
-      color: white;
-      border: 2px solid white;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 4;
-    }
-
-    .section {
-      display: none;
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 2;
-      text-align: center;
-      pointer-events: none;
-    }
-
-    .section.active {
-      display: block;
-      pointer-events: auto;
-    }
-
-    .hoa-list {
-      position: absolute;
-      top: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .back-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      padding: 8px 16px;
-      font-size: 1rem;
-      background: transparent;
-      color: white;
-      border: 2px solid white;
-      border-radius: 5px;
-      cursor: pointer;
-      z-index: 4;
-    }
-
-    .hoa-title {
-      font-size: 3rem;
-      margin-top: 20px;
-      color: white;
-      text-shadow:
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 15px #fff;
     }
   </style>
 </head>
@@ -179,106 +172,76 @@
   <script>
     function showSection(id) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      setTimeout(() => {
+        document.getElementById(id).classList.add('active');
+      }, 50);
     }
-
-    // Snow and Confetti code remains the same from your original script...
 
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
+    const miniCanvas = document.getElementById('mini-snow');
+    const miniCtx = miniCanvas.getContext('2d');
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
 
     let width, height;
     function resize() {
-      width = snowCanvas.width = window.innerWidth;
-      height = snowCanvas.height = window.innerHeight;
-      confettiCanvas.width = width;
-      confettiCanvas.height = height;
+      width = snowCanvas.width = confettiCanvas.width = window.innerWidth;
+      height = snowCanvas.height = confettiCanvas.height = window.innerHeight;
     }
     window.addEventListener('resize', resize);
 
-    const snowFlakes = [];
-    const snowColors = ['#ffffff', '#cccccc', '#333333'];
-
-    for (let i = 0; i < 150; i++) {
-      snowFlakes.push({
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        r: Math.random() * 3 + 1,
-        d: Math.random() + 0.5,
-        color: snowColors[Math.floor(Math.random() * snowColors.length)]
-      });
-    }
+    const snowFlakes = Array.from({length: 150}, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 3 + 1,
+      d: Math.random() + 0.5,
+      color: ['#ffffff', '#cccccc', '#333333'][Math.floor(Math.random() * 3)]
+    }));
 
     function drawSnow() {
       snowCtx.clearRect(0, 0, width, height);
-      for (let flake of snowFlakes) {
+      snowFlakes.forEach(flake => {
         snowCtx.beginPath();
         snowCtx.fillStyle = flake.color;
         snowCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         snowCtx.fill();
-      }
-      moveSnow();
-    }
-
-    function moveSnow() {
-      for (let flake of snowFlakes) {
+      });
+      snowFlakes.forEach(flake => {
         flake.y += flake.d;
         if (flake.y > height) {
           flake.y = 0;
           flake.x = Math.random() * width;
         }
-      }
-    }
-
-    function animateSnow() {
-      drawSnow();
-      requestAnimationFrame(animateSnow);
-    }
-
-    const miniCanvas = document.getElementById('mini-snow');
-    const miniCtx = miniCanvas.getContext('2d');
-    const miniFlakes = [];
-
-    for (let i = 0; i < 40; i++) {
-      miniFlakes.push({
-        x: Math.random() * miniCanvas.width,
-        y: Math.random() * miniCanvas.height,
-        r: Math.random() * 1.5 + 0.5,
-        d: Math.random() * 0.5 + 0.2,
-        color: snowColors[Math.floor(Math.random() * snowColors.length)]
       });
     }
 
+    const miniFlakes = Array.from({length: 40}, () => ({
+      x: Math.random() * miniCanvas.width,
+      y: Math.random() * miniCanvas.height,
+      r: Math.random() * 1.5 + 0.5,
+      d: Math.random() * 0.5 + 0.2,
+      color: ['#ffffff', '#cccccc', '#333333'][Math.floor(Math.random() * 3)]
+    }));
+
     function drawMiniSnow() {
       miniCtx.clearRect(0, 0, miniCanvas.width, miniCanvas.height);
-      for (let flake of miniFlakes) {
+      miniFlakes.forEach(flake => {
         miniCtx.beginPath();
         miniCtx.fillStyle = flake.color;
         miniCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
         miniCtx.fill();
-      }
-      moveMiniSnow();
-    }
-
-    function moveMiniSnow() {
-      for (let flake of miniFlakes) {
+      });
+      miniFlakes.forEach(flake => {
         flake.y += flake.d;
         if (flake.y > miniCanvas.height) {
           flake.y = 0;
           flake.x = Math.random() * miniCanvas.width;
         }
-      }
+      });
     }
 
-    function animateMini() {
-      drawMiniSnow();
-      requestAnimationFrame(animateMini);
-    }
-
-    const confettiCanvas = document.getElementById('confetti');
-    const confettiCtx = confettiCanvas.getContext('2d');
     const confettiParticles = [];
-
     function spawnConfetti(x, y) {
       const colors = ['#ff0040', '#ff9900', '#33cc33', '#0099ff', '#cc33ff', '#ffff00'];
       for (let i = 0; i < 5; i++) {
@@ -321,20 +284,20 @@
       }
     }
 
-    function animateConfetti() {
-      drawConfetti();
-      requestAnimationFrame(animateConfetti);
-    }
-
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
 
+    function loop() {
+      drawSnow();
+      drawMiniSnow();
+      drawConfetti();
+      requestAnimationFrame(loop);
+    }
+
     window.addEventListener('load', () => {
       resize();
-      animateSnow();
-      animateMini();
-      animateConfetti();
+      loop();
     });
   </script>
 </body>
