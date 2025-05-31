@@ -66,9 +66,18 @@
       text-shadow: 0 0 3px #fff, 0 0 5px #fff;
     }
 
+    .button-row {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 40px;
+      z-index: 4;
+    }
+
     .hoa-button,
     .back-button {
-      position: absolute;
       padding: 10px 30px;
       font-size: 1.2rem;
       background: transparent;
@@ -76,16 +85,13 @@
       border: 2px solid white;
       border-radius: 5px;
       cursor: pointer;
-      z-index: 4;
-    }
-
-    .hoa-button {
-      bottom: 20px;
     }
 
     .back-button {
+      position: absolute;
       top: 20px;
       left: 20px;
+      z-index: 4;
     }
 
     .hoa-title {
@@ -128,9 +134,11 @@
       <h1 class="neon">txt</h1>
       <h2 class="neon-sub">wjlc</h2>
     </div>
-    <button class="hoa-button" style="left: calc(50% - 160px);" onclick="showSection('members')">Members</button>
-    <button class="hoa-button" style="left: 50%; transform: translateX(-50%);" onclick="showSection('hoa')">HOA</button>
-    <button class="hoa-button" style="left: calc(50% + 160px);" onclick="showSection('ops')">Ops</button>
+    <div class="button-row">
+      <button class="hoa-button" onclick="showSection('members')">Members</button>
+      <button class="hoa-button" onclick="showSection('hoa')">HOA</button>
+      <button class="hoa-button" onclick="showSection('ops')">Ops</button>
+    </div>
   </div>
 
   <div id="hoa" class="section">
@@ -304,6 +312,3 @@
   </script>
 </body>
 </html>
-
-
-
