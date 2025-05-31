@@ -67,6 +67,113 @@
     }
   </style>
 </head>
+
+  <!-- Feedback Popup -->
+<div id="popup" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #444;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  z-index: 1000;
+  pointer-events: none;
+  font-size: 1rem;
+"></div>
+
+<!-- Search Area -->
+<div id="search-wrapper" style="text-align: center; margin-top: 2rem; pointer-events: auto;">
+  <input id="search" type="text" placeholder="Enter..." style="
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background: #222;
+    color: white;
+    text-align: center;
+    box-shadow: 0 0 5px #fff, 0 0 10px #000;
+  ">
+</div>
+
+<!-- Destination Section -->
+<div id="txt-section" style="
+  height: 100vh;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  background: #111;
+">
+  <h1 style="
+    font-size: 4rem;
+    color: #fff;
+    text-shadow:
+      0 0 5px #fff,
+      0 0 10px #fff,
+      0 0 20px #fff,
+      0 0 40px #fff;
+  ">TXT</h1>
+  <a href="https://doxbin.com/users/stabbin" target="_blank" style="
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 5px #fff;
+  ">https://doxbin.com/users/stabbin</a>
+</div>
+
+<script>
+  const searchInput = document.getElementById("search");
+  const searchWrapper = document.getElementById("search-wrapper");
+  const popup = document.getElementById("popup");
+  const txtSection = document.getElementById("txt-section");
+
+  function showPopup(message) {
+    popup.textContent = message;
+    popup.style.opacity = "1";
+    setTimeout(() => popup.style.opacity = "0", 2000);
+  }
+
+  searchInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      const val = searchInput.value.trim().toLowerCase();
+      if (val === "txt") {
+        showPopup("correct");
+
+        // Replace search box with button
+        const btn = document.createElement("button");
+        btn.textContent = "txt";
+        btn.style = `
+          padding: 10px 20px;
+          font-size: 1rem;
+          background: #222;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          box-shadow: 0 0 5px #fff, 0 0 10px #000;
+        `;
+        btn.onclick = () => {
+          txtSection.style.display = "flex";
+          txtSection.scrollIntoView({ behavior: "smooth" });
+        };
+        searchWrapper.innerHTML = "";
+        searchWrapper.appendChild(btn);
+      } else {
+        showPopup("incorrect");
+      }
+    }
+  });
+</script>
+
 <body>
 
   <!-- Neon Text -->
