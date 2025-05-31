@@ -101,65 +101,24 @@
       margin-top: 40px;
     }
 
-    /* Normal flowing RGB text effect */
-    .rgb-flow {
-      font-size: 1.1rem;
-      margin: 0.4rem 0;
-      font-weight: bold;
-      background: linear-gradient(
-        90deg,
-        red, orange, yellow, green, cyan, blue, violet, red
-      );
-      background-size: 800% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: flowRGB 8s linear infinite;
-      cursor: pointer;
+    .neon-small {
+      font-size: 0.9rem;
+      margin: 0.3rem 0;
+      color: #fff;
+      text-shadow: 0 0 2px #fff, 0 0 4px #fff;
       transition: all 0.3s ease;
-      text-shadow: none;
     }
 
-    /* Neon glow on hover */
-    .rgb-flow:hover {
-      animation: neonGlow 2s linear infinite;
-      -webkit-text-fill-color: white;
-      background: none;
-      text-shadow:
-        0 0 5px #fff,
-        0 0 10px #fff,
-        0 0 20px #0ff,
-        0 0 30px #0ff,
-        0 0 40px #0ff,
-        0 0 50px #0ff,
-        0 0 60px #0ff;
+    .neon-small:hover {
+      animation: neonRGB 2s linear infinite;
     }
 
-    @keyframes flowRGB {
-      0% { background-position: 0% 0; }
-      100% { background-position: 800% 0; }
-    }
-
-    @keyframes neonGlow {
-      0%, 100% {
-        text-shadow:
-          0 0 5px #fff,
-          0 0 10px #fff,
-          0 0 20px #0ff,
-          0 0 30px #0ff,
-          0 0 40px #0ff,
-          0 0 50px #0ff,
-          0 0 60px #0ff;
-      }
-      50% {
-        text-shadow:
-          0 0 10px #0ff,
-          0 0 20px #0ff,
-          0 0 30px #0ff,
-          0 0 40px #0ff,
-          0 0 50px #0ff,
-          0 0 60px #0ff,
-          0 0 70px #0ff;
-      }
+    @keyframes neonRGB {
+      0% { text-shadow: 0 0 5px red, 0 0 10px orange; color: red; }
+      25% { text-shadow: 0 0 5px yellow, 0 0 10px lime; color: yellow; }
+      50% { text-shadow: 0 0 5px cyan, 0 0 10px blue; color: cyan; }
+      75% { text-shadow: 0 0 5px violet, 0 0 10px magenta; color: violet; }
+      100% { text-shadow: 0 0 5px red, 0 0 10px orange; color: red; }
     }
   </style>
 </head>
@@ -178,19 +137,19 @@
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">HOA</div>
     <div class="hoa-list">
-      <div class="rgb-flow">goku</div>
-      <div class="rgb-flow">cube</div>
-      <div class="rgb-flow">critzo</div>
-      <div class="rgb-flow">ant</div>
-      <div class="rgb-flow">ncxkzos</div>
-      <div class="rgb-flow">ginger</div>
-      <div class="rgb-flow">JB</div>
-      <div class="rgb-flow">nuwz</div>
-      <div class="rgb-flow">Killua</div>
-      <div class="rgb-flow">spares</div>
-      <div class="rgb-flow">luv</div>
-      <div class="rgb-flow">vlonto</div>
-      <div class="rgb-flow">vylao</div>
+      <div class="neon-small">goku</div>
+      <div class="neon-small">cube</div>
+      <div class="neon-small">critzo</div>
+      <div class="neon-small">ant</div>
+      <div class="neon-small">ncxkzos</div>
+      <div class="neon-small">ginger</div>
+      <div class="neon-small">JB</div>
+      <div class="neon-small">nuwz</div>
+      <div class="neon-small">Killua</div>
+      <div class="neon-small">spares</div>
+      <div class="neon-small">luv</div>
+      <div class="neon-small">vlonto</div>
+      <div class="neon-small">vylao</div>
     </div>
   </div>
 
@@ -329,3 +288,4 @@
   </script>
 </body>
 </html>
+
