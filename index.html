@@ -44,6 +44,15 @@
         0 0 5px #fff;
     }
 
+    .neon-small {
+      font-size: 1.2rem;
+      margin: 0.3rem 0;
+      color: #fff;
+      text-shadow:
+        0 0 2px #fff,
+        0 0 4px #fff;
+    }
+
     canvas {
       position: fixed;
       top: 0;
@@ -66,107 +75,115 @@
       z-index: 3;
     }
 
-    .btn-hoa {
+    .hoa-button {
       position: absolute;
-      bottom: 30px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 4;
-      background: none;
-      border: 2px solid white;
+      padding: 10px 30px;
+      font-size: 1.2rem;
+      background: transparent;
       color: white;
-      font-size: 1.5rem;
-      padding: 10px 20px;
+      border: 2px solid white;
+      border-radius: 5px;
       cursor: pointer;
-      pointer-events: auto;
-      text-shadow: 0 0 5px white, 0 0 10px white;
+      z-index: 4;
     }
 
-    #hoa-section {
+    .section {
+      display: none;
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: #111;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      padding-top: 50px;
-      z-index: 5;
+      z-index: 2;
+      text-align: center;
+      pointer-events: none;
     }
 
-    .hoa-name {
-      font-size: 2rem;
-      color: white;
-      margin: 10px 0;
-      text-shadow:
-        0 0 5px #fff,
-        0 0 10px #fff;
+    .section.active {
+      display: block;
+      pointer-events: auto;
     }
 
-    .back-btn {
+    .hoa-list {
+      position: absolute;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .back-button {
       position: absolute;
       top: 20px;
       left: 20px;
-      font-size: 1.2rem;
+      padding: 8px 16px;
+      font-size: 1rem;
+      background: transparent;
       color: white;
-      background: none;
       border: 2px solid white;
-      padding: 5px 15px;
+      border-radius: 5px;
       cursor: pointer;
-      z-index: 6;
-      text-shadow: 0 0 5px white;
+      z-index: 4;
+    }
+
+    .hoa-title {
+      font-size: 3rem;
+      margin-top: 20px;
+      color: white;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #fff,
+        0 0 15px #fff;
     }
   </style>
 </head>
 <body>
 
   <!-- Main Section -->
-  <div id="main-section">
+  <div id="main" class="section active">
     <div class="center">
       <h1 class="neon">txt</h1>
       <h2 class="neon-sub">wjlc</h2>
     </div>
-    <button class="btn-hoa" onclick="showHOA()">HOA</button>
-    <canvas id="snow"></canvas>
-    <canvas id="mini-snow" width="300" height="150"></canvas>
-    <canvas id="confetti"></canvas>
+    <button class="hoa-button" onclick="showSection('hoa')">HOA</button>
   </div>
 
   <!-- HOA Section -->
-  <div id="hoa-section">
-    <button class="back-btn" onclick="showMain()">TXT</button>
-    <div>
-      <div class="hoa-name">goku</div>
-      <div class="hoa-name">cube</div>
-      <div class="hoa-name">critzo</div>
-      <div class="hoa-name">ant</div>
-      <div class="hoa-name">ncxkzos</div>
-      <div class="hoa-name">ginger</div>
-      <div class="hoa-name">JB</div>
-      <div class="hoa-name">nuwz</div>
-      <div class="hoa-name">Killua</div>
-      <div class="hoa-name">spares</div>
-      <div class="hoa-name">luv</div>
-      <div class="hoa-name">vlonto</div>
-      <div class="hoa-name">vylao</div>
+  <div id="hoa" class="section">
+    <button class="back-button" onclick="showSection('main')">TXT</button>
+    <div class="hoa-title">HOA</div>
+    <div class="hoa-list">
+      <div class="neon-small">goku</div>
+      <div class="neon-small">cube</div>
+      <div class="neon-small">critzo</div>
+      <div class="neon-small">ant</div>
+      <div class="neon-small">ncxkzos</div>
+      <div class="neon-small">ginger</div>
+      <div class="neon-small">JB</div>
+      <div class="neon-small">nuwz</div>
+      <div class="neon-small">Killua</div>
+      <div class="neon-small">spares</div>
+      <div class="neon-small">luv</div>
+      <div class="neon-small">vlonto</div>
+      <div class="neon-small">vylao</div>
     </div>
   </div>
 
+  <!-- Canvases -->
+  <canvas id="snow"></canvas>
+  <canvas id="mini-snow" width="300" height="150"></canvas>
+  <canvas id="confetti"></canvas>
+
   <script>
-    // Toggle Sections
-    function showHOA() {
-      document.getElementById('main-section').style.display = 'none';
-      document.getElementById('hoa-section').style.display = 'flex';
+    function showSection(id) {
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     }
 
-    function showMain() {
-      document.getElementById('hoa-section').style.display = 'none';
-      document.getElementById('main-section').style.display = 'block';
-    }
+    // Snow and Confetti code remains the same from your original script...
 
-    // (All your existing animation JS code below, unchanged)
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
 
@@ -309,20 +326,16 @@
       requestAnimationFrame(animateConfetti);
     }
 
-    // Init
-    function init() {
-      resize();
-      animateSnow();
-      animateMini();
-      animateConfetti();
-    }
-
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
 
-    window.addEventListener('load', init);
+    window.addEventListener('load', () => {
+      resize();
+      animateSnow();
+      animateMini();
+      animateConfetti();
+    });
   </script>
 </body>
 </html>
-
