@@ -89,6 +89,9 @@
     const snowCanvas = document.getElementById('snow');
     const snowCtx = snowCanvas.getContext('2d');
 
+    const confettiCanvas = document.getElementById('confetti');
+    const confettiCtx = confettiCanvas.getContext('2d');
+
     let width, height;
     function resize() {
       width = snowCanvas.width = window.innerWidth;
@@ -179,8 +182,6 @@
     }
 
     // CONFETTI EFFECT
-    const confettiCanvas = document.getElementById('confetti');
-    const confettiCtx = confettiCanvas.getContext('2d');
     const confettiParticles = [];
 
     function spawnConfetti(x, y) {
@@ -189,7 +190,7 @@
         confettiParticles.push({
           x: x + (Math.random() * 20 - 10),
           y: y + (Math.random() * 20 - 10),
-          r: Math.random() * 4 + 2,
+          r: Math.random() * 1.5 + 0.5, // smaller stars
           dy: Math.random() * 1 + 0.5,
           opacity: 1,
           color: colors[Math.floor(Math.random() * colors.length)]
@@ -230,7 +231,6 @@
       requestAnimationFrame(animateConfetti);
     }
 
-    // Initialize all animations
     function init() {
       resize();
       animateSnow();
@@ -238,14 +238,11 @@
       animateConfetti();
     }
 
-    // Event listener for mouse movement
     document.addEventListener('mousemove', e => {
       spawnConfetti(e.clientX, e.clientY);
     });
 
-    // Start animations on window load
     window.addEventListener('load', init);
   </script>
 </body>
 </html>
-
