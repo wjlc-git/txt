@@ -10,98 +10,167 @@
       height: 100%;
       background: #111;
       overflow: hidden;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       color: white;
     }
+
     .center {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      z-index: 1;
+      z-index: 2;
+      pointer-events: none;
     }
-    .center h1 {
+
+    .neon {
       font-size: 5rem;
       margin: 0;
+      color: #fff;
+      text-shadow:
+        0 0 5px #fff,
+        0 0 10px #0ff,
+        0 0 20px #0ff,
+        0 0 40px #0ff;
     }
-    .center h2 {
+
+    .neon-sub {
       font-size: 2rem;
       margin-top: 0.5rem;
-      color: #aaa;
+      color: #ccc;
+      text-shadow:
+        0 0 3px #ccc,
+        0 0 5px #0ff;
     }
+
     canvas {
       position: fixed;
       top: 0;
       left: 0;
       pointer-events: none;
-      z-index: 0;
+    }
+
+    #mini-snow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 150px;
+      z-index: 1;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
+
+  <!-- Neon Text -->
   <div class="center">
-    <h1>txt</h1>
-    <h2>wjlc</h2>
+    <h1 class="neon">txt</h1>
+    <h2 class="neon-sub">wjlc</h2>
   </div>
+
+  <!-- Full Background Snow -->
   <canvas id="snow"></canvas>
+
+  <!-- Small Snow Over Text -->
+  <canvas id="mini-snow" width="300" height="150"></canvas>
+
   <script>
-    const canvas = document.getElementById('snow');
-    const ctx = canvas.getContext('2d');
+    // FULLSCREEN SNOW
+    const snowCanvas = document.getElementById('snow');
+    const snowCtx = snowCanvas.getContext('2d');
+
     let width, height;
-
     function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = snowCanvas.width = window.innerWidth;
+      height = snowCanvas.height = window.innerHeight;
     }
-
     window.addEventListener('resize', resize);
     resize();
 
-    const flakes = [];
-    const colors = ['#ffffff', '#cccccc', '#333333'];
+    const snowFlakes = [];
+    const snowColors = ['#ffffff', '#cccccc', '#333333'];
 
     for (let i = 0; i < 150; i++) {
-      flakes.push({
+      snowFlakes.push({
         x: Math.random() * width,
         y: Math.random() * height,
         r: Math.random() * 3 + 1,
         d: Math.random() + 0.5,
-        color: colors[Math.floor(Math.random() * colors.length)]
+        color: snowColors[Math.floor(Math.random() * snowColors.length)]
       });
     }
 
-    function drawFlakes() {
-      ctx.clearRect(0, 0, width, height);
-      ctx.beginPath();
-      for (let i = 0; i < flakes.length; i++) {
-        const f = flakes[i];
-        ctx.fillStyle = f.color;
-        ctx.beginPath();
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-        ctx.fill();
+    function drawSnow() {
+      snowCtx.clearRect(0, 0, width, height);
+      for (let flake of snowFlakes) {
+        snowCtx.beginPath();
+        snowCtx.fillStyle = flake.color;
+        snowCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+        snowCtx.fill();
       }
-      moveFlakes();
+      moveSnow();
     }
 
-    function moveFlakes() {
-      for (let i = 0; i < flakes.length; i++) {
-        const f = flakes[i];
-        f.y += f.d;
-        if (f.y > height) {
-          f.y = 0;
-          f.x = Math.random() * width;
+    function moveSnow() {
+      for (let flake of snowFlakes) {
+        flake.y += flake.d;
+        if (flake.y > height) {
+          flake.y = 0;
+          flake.x = Math.random() * width;
         }
       }
     }
 
-    function animate() {
-      drawFlakes();
-      requestAnimationFrame(animate);
+    function animateSnow() {
+      drawSnow();
+      requestAnimationFrame(animateSnow);
+    }
+    animateSnow();
+
+    // MINI SNOW ON TEXT
+    const miniCanvas = document.getElementById('mini-snow');
+    const miniCtx = miniCanvas.getContext('2d');
+    const miniFlakes = [];
+
+    for (let i = 0; i < 40; i++) {
+      miniFlakes.push({
+        x: Math.random() * miniCanvas.width,
+        y: Math.random() * miniCanvas.height,
+        r: Math.random() * 1.5 + 0.5,
+        d: Math.random() * 0.5 + 0.2,
+        color: snowColors[Math.floor(Math.random() * snowColors.length)]
+      });
     }
 
-    animate();
+    function drawMiniSnow() {
+      miniCtx.clearRect(0, 0, miniCanvas.width, miniCanvas.height);
+      for (let flake of miniFlakes) {
+        miniCtx.beginPath();
+        miniCtx.fillStyle = flake.color;
+        miniCtx.arc(flake.x, flake.y, flake.r, 0, Math.PI * 2);
+        miniCtx.fill();
+      }
+      moveMiniSnow();
+    }
+
+    function moveMiniSnow() {
+      for (let flake of miniFlakes) {
+        flake.y += flake.d;
+        if (flake.y > miniCanvas.height) {
+          flake.y = 0;
+          flake.x = Math.random() * miniCanvas.width;
+        }
+      }
+    }
+
+    function animateMini() {
+      drawMiniSnow();
+      requestAnimationFrame(animateMini);
+    }
+    animateMini();
   </script>
 </body>
 </html>
-
