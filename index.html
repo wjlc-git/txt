@@ -88,20 +88,20 @@
 
     .hoa-title {
       font-size: 3rem;
+      margin-top: 80px;
       color: white;
       text-align: center;
       text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff;
-      margin-bottom: 20px;
     }
 
     .neon-small {
       font-size: 0.9rem;
       color: #fff;
       text-shadow: 0 0 2px #fff, 0 0 4px #fff;
-      transition: color 0.3s ease, text-shadow 0.3s ease;
+      transition: all 0.3s ease;
     }
 
-    .neon-small.neon-hover:hover {
+    .neon-small:hover {
       animation: neonRGB 2s linear infinite;
     }
 
@@ -164,13 +164,10 @@
     }
 
     .hoa-list {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
       display: flex;
       flex-direction: column;
       align-items: center;
+      margin-top: 20px;
       gap: 10px;
     }
   </style>
@@ -196,8 +193,8 @@
   <div id="members" class="section">
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="scrollable-doc" id="member-list">
-      <div class="neon-small neon-hover">wjlc (Owner)</div>
-      <div class="neon-small neon-hover">HarvoxTheGreat</div>
+      <div class="neon-small">wjlc (Owner)</div>
+      <div class="neon-small">HarvoxTheGreat</div>
     </div>
     <div class="fixed-search-bar">
       <input type="text" id="usernameInput" placeholder="Enter username" />
@@ -210,22 +207,22 @@
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">Hall Of Autism</div>
     <div class="hoa-list">
-      <div class="neon-small neon-hover">goku</div>
-      <div class="neon-small neon-hover">cube</div>
-      <div class="neon-small neon-hover">critzo</div>
-      <div class="neon-small neon-hover">ant</div>
-      <div class="neon-small neon-hover">ncxkzos</div>
-      <div class="neon-small neon-hover">ginger</div>
-      <div class="neon-small neon-hover">JB</div>
-      <div class="neon-small neon-hover">nuwz</div>
-      <div class="neon-small neon-hover">Killua</div>
-      <div class="neon-small neon-hover">spares</div>
-      <div class="neon-small neon-hover">luv</div>
-      <div class="neon-small neon-hover">vlonto</div>
-      <div class="neon-small neon-hover">vylao</div>
-      <div class="neon-small neon-hover">JAH</div>
-      <div class="neon-small neon-hover">jit</div>
-      <div class="neon-small neon-hover">2facedada</div>
+      <div class="neon-small">goku</div>
+      <div class="neon-small">cube</div>
+      <div class="neon-small">critzo</div>
+      <div class="neon-small">ant</div>
+      <div class="neon-small">ncxkzos</div>
+      <div class="neon-small">ginger</div>
+      <div class="neon-small">JB</div>
+      <div class="neon-small">nuwz</div>
+      <div class="neon-small">Killua</div>
+      <div class="neon-small">spares</div>
+      <div class="neon-small">luv</div>
+      <div class="neon-small">vlonto</div>
+      <div class="neon-small">vylao</div>
+      <div class="neon-small">JAH</div>
+      <div class="neon-small">jit</div>
+      <div class="neon-small">2facedada</div>
     </div>
   </div>
 
@@ -233,14 +230,14 @@
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">Operations</div>
     <div class="hoa-list">
-      <div class="neon-small neon-hover">Ginger's Dox</div>
-      <div class="neon-small neon-hover">JAH's Dox</div>
-      <div class="neon-small neon-hover">Zack_vsn's Dox</div>
-      <div class="neon-small neon-hover">Adam's Dox</div>
-      <div class="neon-small neon-hover">Matejs's Dox</div>
-      <div class="neon-small neon-hover">Radek's Dox</div>
-      <div class="neon-small neon-hover">Mailed Randoms</div>
-      <div class="neon-small neon-hover">Created Snusbase Clone</div>
+      <div class="neon-small">Ginger's Dox</div>
+      <div class="neon-small">JAH's Dox</div>
+      <div class="neon-small">Zack_vsn's Dox</div>
+      <div class="neon-small">Adam's Dox</div>
+      <div class="neon-small">Matejs's Dox</div>
+      <div class="neon-small">Radek's Dox</div>
+      <div class="neon-small">Mailed Randoms</div>
+      <div class="neon-small">Created Snusbase Clone</div>
     </div>
   </div>
 
@@ -271,7 +268,7 @@
       }
 
       const newEntry = document.createElement("div");
-      newEntry.className = "neon-small neon-hover";
+      newEntry.className = "neon-small";
       newEntry.textContent = name;
       document.getElementById("member-list").appendChild(newEntry);
       msg.textContent = `Welcome, ${name}!`;
