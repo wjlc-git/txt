@@ -8,7 +8,7 @@
       margin: 0;
       padding: 0;
       height: 100%;
-      background: #111;
+      background: #000;
       overflow: hidden;
       font-family: 'Arial', sans-serif;
       color: white;
@@ -30,7 +30,6 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 1s ease;
-      text-align: center;
     }
 
     .section.active {
@@ -44,7 +43,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       z-index: 2;
-      pointer-events: none;
+      text-align: center;
     }
 
     .neon {
@@ -70,14 +69,13 @@
       z-index: 4;
     }
 
-    .hoa-button,
-    .back-button {
+    .hoa-button, .back-button {
       padding: 10px 30px;
       font-size: 1.2rem;
       background: transparent;
       color: white;
       border: 2px solid white;
-      border-radius: 5px;
+      border-radius: 30px;
       cursor: pointer;
     }
 
@@ -90,18 +88,21 @@
 
     .hoa-title {
       font-size: 3rem;
-      margin-top: 30px;
+      margin: 80px 0 20px 0;
       color: white;
+      text-align: center;
       text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff;
     }
 
     .hoa-list {
-      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      padding: 20px;
     }
 
     .neon-small {
       font-size: 0.9rem;
-      margin: 0.3rem 0;
       color: #fff;
       text-shadow: 0 0 2px #fff, 0 0 4px #fff;
     }
@@ -118,11 +119,20 @@
       100% { text-shadow: 0 0 5px red, 0 0 10px orange; color: red; }
     }
 
+    .join-form {
+      margin-top: 20px;
+      padding-left: 20px;
+    }
+
     .join-form input {
       padding: 10px;
       font-size: 1rem;
-      width: 200px;
-      margin-top: 20px;
+      width: 220px;
+      border: 2px solid white;
+      border-radius: 30px;
+      background: transparent;
+      color: white;
+      outline: none;
     }
 
     .join-form p {
@@ -135,7 +145,6 @@
 
   <audio id="bgMusic" autoplay loop hidden>
     <source src="O U T I N Q U A H O G.mp3" type="audio/mpeg" />
-    Your browser does not support the audio element.
   </audio>
 
   <div id="main" class="section active">
@@ -147,6 +156,20 @@
       <button class="hoa-button" onclick="showSection('members')">Members</button>
       <button class="hoa-button" onclick="showSection('hoa')">HOA</button>
       <button class="hoa-button" onclick="showSection('ops')">Operations</button>
+    </div>
+  </div>
+
+  <div id="members" class="section">
+    <button class="back-button" onclick="showSection('main')">TXT</button>
+    <div class="hoa-list" id="member-list" style="margin-top: 70px;">
+      <div class="neon-small neon-rgb">wjlc (Owner)</div>
+      <div class="neon-small neon-rgb">HarvoxTheGreat</div>
+    </div>
+    <div class="join-form">
+      <input type="text" id="usernameInput" placeholder="Enter username" />
+      <br />
+      <button class="hoa-button" onclick="submitUsername()">Join</button>
+      <p id="submitMsg"></p>
     </div>
   </div>
 
@@ -170,21 +193,6 @@
       <div class="neon-small neon-rgb">JAH</div>
       <div class="neon-small neon-rgb">jit</div>
       <div class="neon-small neon-rgb">2facedada</div>
-    </div>
-  </div>
-
-  <div id="members" class="section">
-    <button class="back-button" onclick="showSection('main')">TXT</button>
-    <div class="hoa-title">Members</div>
-    <div class="hoa-list" id="member-list">
-      <div class="neon-small neon-rgb">wjlc (Owner)</div>
-      <div class="neon-small neon-rgb">HarvoxTheGreat</div>
-    </div>
-    <div class="join-form">
-      <input type="text" id="usernameInput" placeholder="Enter username" />
-      <br />
-      <button class="hoa-button" onclick="submitUsername()">Join</button>
-      <p id="submitMsg"></p>
     </div>
   </div>
 
@@ -229,13 +237,6 @@
       document.getElementById("member-list").appendChild(newEntry);
       msg.textContent = `Welcome, ${name}!`;
       input.value = "";
-
-      // Future API call:
-      // fetch('/api/join', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ username: name })
-      // });
     }
 
     const snowCanvas = document.getElementById('snow');
@@ -369,3 +370,4 @@
   </script>
 </body>
 </html>
+
