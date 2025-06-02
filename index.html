@@ -21,12 +21,6 @@
       pointer-events: none;
     }
 
-    #mini-snow {
-      width: 300px;
-      height: 150px;
-      z-index: 1;
-    }
-
     .section {
       position: absolute;
       top: 0;
@@ -110,10 +104,9 @@
       margin: 0.3rem 0;
       color: #fff;
       text-shadow: 0 0 2px #fff, 0 0 4px #fff;
-      transition: all 0.3s ease;
     }
 
-    .neon-small:hover {
+    .neon-rgb {
       animation: neonRGB 2s linear infinite;
     }
 
@@ -124,17 +117,27 @@
       75% { text-shadow: 0 0 5px violet, 0 0 10px magenta; color: violet; }
       100% { text-shadow: 0 0 5px red, 0 0 10px orange; color: red; }
     }
+
+    .join-form input {
+      padding: 10px;
+      font-size: 1rem;
+      width: 200px;
+      margin-top: 20px;
+    }
+
+    .join-form p {
+      margin-top: 10px;
+      color: #0f0;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Music Player (Hidden) -->
   <audio id="bgMusic" autoplay loop hidden>
     <source src="O U T I N Q U A H O G.mp3" type="audio/mpeg" />
     Your browser does not support the audio element.
   </audio>
 
-  <!-- Sections -->
   <div id="main" class="section active">
     <div class="center">
       <h1 class="neon">txt</h1>
@@ -151,31 +154,37 @@
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">Hall Of Autism</div>
     <div class="hoa-list">
-      <div class="neon-small">goku</div>
-      <div class="neon-small">cube</div>
-      <div class="neon-small">critzo</div>
-      <div class="neon-small">ant</div>
-      <div class="neon-small">ncxkzos</div>
-      <div class="neon-small">ginger</div>
-      <div class="neon-small">JB</div>
-      <div class="neon-small">nuwz</div>
-      <div class="neon-small">Killua</div>
-      <div class="neon-small">spares</div>
-      <div class="neon-small">luv</div>
-      <div class="neon-small">vlonto</div>
-      <div class="neon-small">vylao</div>
-      <div class="neon-small">JAH</div>
-      <div class="neon-small">jit</div>
-      <div class="neon-small">2facedada</div>
+      <div class="neon-small neon-rgb">goku</div>
+      <div class="neon-small neon-rgb">cube</div>
+      <div class="neon-small neon-rgb">critzo</div>
+      <div class="neon-small neon-rgb">ant</div>
+      <div class="neon-small neon-rgb">ncxkzos</div>
+      <div class="neon-small neon-rgb">ginger</div>
+      <div class="neon-small neon-rgb">JB</div>
+      <div class="neon-small neon-rgb">nuwz</div>
+      <div class="neon-small neon-rgb">Killua</div>
+      <div class="neon-small neon-rgb">spares</div>
+      <div class="neon-small neon-rgb">luv</div>
+      <div class="neon-small neon-rgb">vlonto</div>
+      <div class="neon-small neon-rgb">vylao</div>
+      <div class="neon-small neon-rgb">JAH</div>
+      <div class="neon-small neon-rgb">jit</div>
+      <div class="neon-small neon-rgb">2facedada</div>
     </div>
   </div>
 
   <div id="members" class="section">
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">Members</div>
-    <div class="hoa-list">
-      <div class="neon-small">wjlc (Owner)</div>
-      <div class="neon-small">HarvoxTheGreat</div>
+    <div class="hoa-list" id="member-list">
+      <div class="neon-small neon-rgb">wjlc (Owner)</div>
+      <div class="neon-small neon-rgb">HarvoxTheGreat</div>
+    </div>
+    <div class="join-form">
+      <input type="text" id="usernameInput" placeholder="Enter username" />
+      <br />
+      <button class="hoa-button" onclick="submitUsername()">Join</button>
+      <p id="submitMsg"></p>
     </div>
   </div>
 
@@ -183,27 +192,50 @@
     <button class="back-button" onclick="showSection('main')">TXT</button>
     <div class="hoa-title">Operations</div>
     <div class="hoa-list">
-      <div class="neon-small">Ginger's Dox</div>
-      <div class="neon-small">JAH's Dox</div>
-      <div class="neon-small">Zack_vsn's Dox</div>
-      <div class="neon-small">Adam's Dox</div>
-      <div class="neon-small">Matejs's Dox</div>
-       <div class="neon-small">Radek's Dox</div>
-      <div class="neon-small">Mailed Randoms</div>
-      <div class="neon-small">Created Snusbase Clone</div>
+      <div class="neon-small neon-rgb">Ginger's Dox</div>
+      <div class="neon-small neon-rgb">JAH's Dox</div>
+      <div class="neon-small neon-rgb">Zack_vsn's Dox</div>
+      <div class="neon-small neon-rgb">Adam's Dox</div>
+      <div class="neon-small neon-rgb">Matejs's Dox</div>
+      <div class="neon-small neon-rgb">Radek's Dox</div>
+      <div class="neon-small neon-rgb">Mailed Randoms</div>
+      <div class="neon-small neon-rgb">Created Snusbase Clone</div>
     </div>
   </div>
 
-  <!-- Canvases -->
   <canvas id="snow"></canvas>
   <canvas id="mini-snow" width="300" height="150"></canvas>
   <canvas id="confetti"></canvas>
 
-  <!-- Script -->
   <script>
     function showSection(id) {
       document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+    }
+
+    function submitUsername() {
+      const input = document.getElementById("usernameInput");
+      const name = input.value.trim();
+      const msg = document.getElementById("submitMsg");
+
+      if (!name) {
+        msg.textContent = "Please enter a username.";
+        return;
+      }
+
+      const newEntry = document.createElement("div");
+      newEntry.className = "neon-small neon-rgb";
+      newEntry.textContent = name;
+      document.getElementById("member-list").appendChild(newEntry);
+      msg.textContent = `Welcome, ${name}!`;
+      input.value = "";
+
+      // Future API call:
+      // fetch('/api/join', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({ username: name })
+      // });
     }
 
     const snowCanvas = document.getElementById('snow');
